@@ -1281,6 +1281,79 @@
                         c.classList.remove("drag-over");
                     });
                 });
+
+                // スマートフォン・タブレット用 タッチ操作による並び替え
+                let touchDragActive = false;
+                let touchFromIndex = null;
+                let currentTargetCard = null;
+
+                card.addEventListener("touchstart", (e) => {
+                    if (state.isDeleteMode) return;
+                    touchDragActive = true;
+                    touchFromIndex = index;
+                    card.classList.add("dragging");
+                }, { passive: true });
+
+                card.addEventListener("touchmove", (e) => {
+                    if (!touchDragActive || touchFromIndex === null) return;
+                    const touch = e.touches[0];
+                    if (!touch) return;
+
+                    if (e.cancelable) e.preventDefault();
+
+                    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const overCard = element ? element.closest(".thumb-card") : null;
+
+                    if (overCard !== currentTargetCard) {
+                        if (currentTargetCard) {
+                            currentTargetCard.classList.remove("drag-over");
+                        }
+                        if (overCard && overCard !== card) {
+                            overCard.classList.add("drag-over");
+                            currentTargetCard = overCard;
+                        } else {
+                            currentTargetCard = null;
+                        }
+                    }
+                }, { passive: false });
+
+                card.addEventListener("touchend", () => {
+                    if (!touchDragActive) return;
+                    touchDragActive = false;
+                    card.classList.remove("dragging");
+
+                    if (currentTargetCard) {
+                        currentTargetCard.classList.remove("drag-over");
+                        const toIndex = parseInt(currentTargetCard.dataset.index, 10);
+                        if (!isNaN(toIndex) && touchFromIndex !== null && toIndex !== touchFromIndex) {
+                            const [movedItem] = state.images.splice(touchFromIndex, 1);
+                            state.images.splice(toIndex, 0, movedItem);
+                            updateThumbList();
+                            renderStitchedCanvas();
+                        }
+                    }
+
+                    touchFromIndex = null;
+                    currentTargetCard = null;
+                    document.querySelectorAll(".thumb-card").forEach(c => {
+                        c.classList.remove("dragging");
+                        c.classList.remove("drag-over");
+                    });
+                });
+
+                card.addEventListener("touchcancel", () => {
+                    touchDragActive = false;
+                    touchFromIndex = null;
+                    if (currentTargetCard) {
+                        currentTargetCard.classList.remove("drag-over");
+                        currentTargetCard = null;
+                    }
+                    card.classList.remove("dragging");
+                    document.querySelectorAll(".thumb-card").forEach(c => {
+                        c.classList.remove("dragging");
+                        c.classList.remove("drag-over");
+                    });
+                });
             }
 
             list.appendChild(card);

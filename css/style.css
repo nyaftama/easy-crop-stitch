@@ -1293,6 +1293,8 @@ input[type="range"] {
     cursor: grab;
     transition: var(--transition);
     user-select: none;
+    -webkit-user-select: none;
+    touch-action: none; /* スマホ・タブレットでのタッチドラッグ並び替えを有効化 */
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -1316,7 +1318,8 @@ input[type="range"] {
 
 .thumb-card.drag-over {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.4);
+    transform: scale(1.05);
 }
 
 .thumb-card img {
