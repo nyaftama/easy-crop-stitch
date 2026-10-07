@@ -233,6 +233,10 @@
                 btn.classList.toggle("active", btn.dataset.tab === tab);
             });
         }
+        const mainContent = document.querySelector(".workspace-main-content");
+        if (mainContent) {
+            mainContent.scrollTop = 0;
+        }
         if (tab === "preview") {
             renderStitchedCanvas();
         } else if (tab === "crop") {
