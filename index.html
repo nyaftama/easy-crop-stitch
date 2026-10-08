@@ -2,6 +2,15 @@
 <html lang="ja">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2RNJ72H75W"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-2RNJ72H75W');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Prevent HTML Cache -->
@@ -24,7 +33,7 @@
     <meta name="twitter:description" content="同じ解像度の複数画像から指定範囲を一括で自動切り抜きし、グリッドや一列に並べて結合できる無料Webツール。">
 
     <!-- Favicon & App Icons -->
-    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg?v=0.90c">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +48,7 @@
     <script src="https://cdn.jsdelivr.net/npm/heic-to/dist/iife/heic-to.js"></script>
 
     <!-- Application CSS -->
-    <link rel="stylesheet" href="css/style.css?v=0.90b">
+    <link rel="stylesheet" href="css/style.css?v=0.90c">
 </head>
 
 <body>
@@ -328,36 +337,50 @@
 
         <!-- ワークスペース ヘッダーバー -->
         <header class="workspace-header">
-            <div class="workspace-header-left">
-                <button type="button" id="btnBackToStart" class="btn btn-secondary btn-sm" title="スタート画面に戻る">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    <span>戻る</span>
-                </button>
+            <!-- スマートフォン表示用: 最上段タイトル行 (中央寄せ) -->
+            <div class="workspace-header-top-brand">
+                <img src="img/favicon.svg?v=0.90c" alt="" class="workspace-header-icon" width="20" height="20">
+                <span class="workspace-header-title">かんたんクロップ結合ツール</span>
             </div>
 
-            <div class="workspace-header-actions">
-                <input type="file" id="addMoreFileInput" accept="image/*,.heic,.heif" multiple style="display: none;">
-                <button type="button" id="btnAddMoreImages" class="btn btn-secondary btn-sm" title="画像を追加読み込み">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>画像を追加</span>
-                </button>
-                <button type="button" id="btnHeaderExportStitched" class="btn btn-accent btn-sm" title="結合画像を保存">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    <span>画像を保存</span>
-                </button>
+            <div class="workspace-header-nav-row">
+                <div class="workspace-header-left">
+                    <button type="button" id="btnBackToStart" class="btn btn-secondary btn-sm" title="スタート画面に戻る">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span>戻る</span>
+                    </button>
+                    <!-- デスクトップ表示用: 戻るボタンの横にサイトアイコンとタイトルを表示 -->
+                    <div class="workspace-header-desktop-brand">
+                        <img src="img/favicon.svg?v=0.90c" alt="" class="workspace-header-icon" width="20" height="20">
+                        <span class="workspace-header-title">かんたんクロップ結合ツール</span>
+                    </div>
+                </div>
+
+                <div class="workspace-header-actions">
+                    <input type="file" id="addMoreFileInput" accept="image/*,.heic,.heif" multiple
+                        style="display: none;">
+                    <button type="button" id="btnAddMoreImages" class="btn btn-secondary btn-sm" title="画像を追加読み込み">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>画像を追加</span>
+                    </button>
+                    <button type="button" id="btnHeaderExportStitched" class="btn btn-accent btn-sm" title="結合画像を保存">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>画像を保存</span>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -983,7 +1006,7 @@
     </div>
 
     <!-- Application Script -->
-    <script src="js/app.js?v=0.90b"></script>
+    <script src="js/app.js?v=0.90c"></script>
 </body>
 
 </html>

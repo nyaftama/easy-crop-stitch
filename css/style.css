@@ -536,32 +536,43 @@ body {
     z-index: 10;
 }
 
-.workspace-title-group {
+.workspace-header-top-brand {
+    display: none;
+}
+
+.workspace-header-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.workspace-header-left {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.project-info {
-    display: flex;
+.workspace-header-desktop-brand {
+    display: inline-flex;
     align-items: center;
     gap: 8px;
+    user-select: none;
 }
 
-.project-badge {
-    background: var(--primary-light);
-    color: var(--primary-color);
-    border: 1px solid var(--primary-border);
-    font-size: 12px;
+.workspace-header-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: block;
+}
+
+.workspace-header-title {
+    font-size: 14px;
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 12px;
-}
-
-.project-meta-size {
-    font-size: 12px;
-    color: var(--text-muted-dark);
-    font-family: 'SF Mono', monospace;
+    color: var(--text-main);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
 }
 
 .workspace-header-actions {
@@ -631,8 +642,10 @@ body {
 
 /* クロップステージビューア */
 .crop-viewer-wrapper {
-    flex: 1;
+    flex: 1 1 0%;
+    height: 0;
     min-height: 0;
+    min-width: 0;
     background: #0f172a;
     display: flex;
     align-items: center;
@@ -641,6 +654,7 @@ body {
     overflow: hidden;
     padding: 12px;
     user-select: none;
+    box-sizing: border-box;
 }
 
 .crop-stage {
@@ -650,13 +664,18 @@ body {
     justify-content: center;
     max-width: 100%;
     max-height: 100%;
+    width: auto;
+    height: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
 }
 
 .crop-stage img {
     display: block;
     max-width: 100%;
     max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
     pointer-events: none;
     user-select: none;
@@ -1294,7 +1313,8 @@ input[type="range"] {
     transition: var(--transition);
     user-select: none;
     -webkit-user-select: none;
-    touch-action: none; /* スマホ・タブレットでのタッチドラッグ並び替えを有効化 */
+    touch-action: none;
+    /* スマホ・タブレットでのタッチドラッグ並び替えを有効化 */
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -1981,7 +2001,55 @@ input[type="range"] {
         overflow: hidden;
     }
 
-    /* メインコンテンツエリア: ヘッダーと下部固定タブの間を埋め、中身を上下中央寄せ */
+    /* モバイル ヘッダー: 1行目にタイトル中央寄せ、2行目にナビゲーション */
+    .workspace-header {
+        height: auto;
+        min-height: 48px;
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .workspace-header-top-brand {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        padding-bottom: 4px;
+        border-bottom: 1px solid var(--border-light);
+        user-select: none;
+    }
+
+    .workspace-header-top-brand .workspace-header-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .workspace-header-top-brand .workspace-header-title {
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .workspace-header-desktop-brand {
+        display: none !important;
+    }
+
+    .workspace-header-nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .workspace-header-left {
+        display: flex;
+        align-items: center;
+    }
+
+    /* メインコンテンツエリア */
     .workspace-main-content {
         flex: 1;
         min-height: 0;
@@ -1990,136 +2058,142 @@ input[type="range"] {
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        padding: 14px 14px calc(56px + env(safe-area-inset-bottom, 0px) + 14px) 14px;
+        padding: 12px 12px calc(54px + env(safe-area-inset-bottom, 0px) + 12px) 12px;
         box-sizing: border-box;
+    }
+
+    /* クロップおよびプレビュー表示時は画面全体いっぱいに展開 (デスクトップの workspace-col-main と同様) */
+    body[data-mobile-tab="crop"] .workspace-main-content,
+    body[data-mobile-tab="preview"] .workspace-main-content {
+        overflow: hidden;
+        padding: 8px 8px calc(54px + env(safe-area-inset-bottom, 0px) + 8px) 8px;
     }
 
     .workspace-col-main,
     .workspace-col-layout,
     .workspace-col-tray {
         display: contents;
-        /* 直下の4セクションがタブに応じて単一表示される */
     }
 
-    /* スマートフォン表示ではパネルヘッダーを非表示にして重複を排除 */
+    /* スマートフォン表示ではパネルヘッダーを非表示 */
     .panel-header,
     .pane-header {
         display: none !important;
     }
 
-    /* モバイル4タブ切り替え: アクティブな1セクションを上下左右中央に配置 */
+    /* モバイル タブ切り替え: デフォルト共通 */
     #sectionCrop,
     #sectionLayout,
     #sectionTray,
     #sectionPreview {
         display: none !important;
-        width: 100%;
-        max-width: 580px;
-        margin: auto;
         box-sizing: border-box;
     }
 
+    /* クロップ画面: 画面いっぱいに広げる */
     body[data-mobile-tab="crop"] #sectionCrop {
         display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        flex: 1 1 0%;
+        min-height: 0;
+        margin: 0;
+        padding: 10px;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        gap: 8px;
     }
 
-    body[data-mobile-tab="layout"] #sectionLayout {
-        display: flex !important;
-    }
-
-    body[data-mobile-tab="tray"] #sectionTray {
-        display: flex !important;
-    }
-
+    /* プレビュー画面: 画面いっぱいに広げる */
     body[data-mobile-tab="preview"] #sectionPreview {
         display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        flex: 1 1 0%;
+        min-height: 0;
+        margin: 0;
+        padding: 10px;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        gap: 8px;
     }
 
-    /* モバイル パネルカードスタイル */
-    #sectionCrop,
-    #sectionPreview,
-    #sectionLayout,
-    #sectionTray {
+    /* レイアウト画面・並び順管理画面: 中央寄せ・スクロール可能 */
+    body[data-mobile-tab="layout"] #sectionLayout,
+    body[data-mobile-tab="tray"] #sectionTray {
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        max-width: 580px;
+        margin: auto;
         background: #ffffff;
         border: 1px solid var(--border-color);
         border-radius: var(--radius-lg);
         padding: 14px;
         box-shadow: var(--shadow-card);
+        height: auto;
+        overflow: visible;
     }
 
-    body[data-mobile-tab="crop"] #sectionCrop {
-        display: flex !important;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    body[data-mobile-tab="preview"] #sectionPreview {
-        display: flex !important;
-        flex-direction: column;
-        gap: 12px;
-    }
-
+    /* クロップパネル内の配置 */
     #sectionCrop .crop-quick-actions {
         background: transparent;
         border: none;
-        padding: 0 0 8px 0;
+        padding: 0 0 4px 0;
+        flex-shrink: 0;
     }
 
     #sectionCrop .crop-viewer-wrapper {
         border-radius: var(--radius-md);
+        flex: 1 1 0%;
+        height: 0;
+        min-height: 0;
+        max-height: none;
+        padding: 6px;
     }
 
     #sectionCrop .crop-controls-card {
         border: none;
-        padding: 0;
+        padding: 4px 0 0 0;
+        flex-shrink: 0;
+        overflow-y: auto;
+        max-height: 160px;
     }
 
+    /* プレビューパネル内の配置 */
     #sectionPreview .preview-toolbar {
         background: transparent;
         border: none;
-        padding: 0 0 6px 0;
+        padding: 0 0 4px 0;
+        flex-shrink: 0;
     }
 
     #sectionPreview .stitch-canvas-viewport {
         border-radius: var(--radius-md);
+        flex: 1 1 0%;
+        height: 0;
+        min-height: 0;
+        max-height: none;
+        padding: 8px;
     }
 
     .panel-body {
         padding: 0 !important;
         overflow: visible;
     }
-
-    /* モバイル ビューアスタイル */
-    .crop-viewer-wrapper {
-        min-height: 220px;
-        height: 48vh;
-        max-height: 440px;
-        padding: 8px;
-    }
-
-    .stitch-canvas-viewport {
-        min-height: 240px;
-        height: 52vh;
-        max-height: 480px;
-        padding: 8px;
-    }
-
-    .crop-pane,
-    .preview-pane,
-    .settings-pane,
-    .tray-pane {
-        height: auto;
-        overflow: visible;
-    }
 }
 
 @media (max-width: 768px) {
-    .workspace-header {
-        height: auto;
-        min-height: 48px;
-        padding: 6px 10px;
-        gap: 6px;
-    }
 
     .workspace-header-actions {
         display: flex;

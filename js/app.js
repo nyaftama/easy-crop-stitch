@@ -218,7 +218,10 @@
         if (tab === "preview") {
             renderStitchedCanvas();
         } else if (tab === "crop") {
-            updateCropBoxDisplay();
+            requestAnimationFrame(() => {
+                updateCropViewerConstraints();
+                updateCropBoxDisplay();
+            });
         }
     }
 
@@ -240,7 +243,10 @@
         if (tab === "preview") {
             renderStitchedCanvas();
         } else if (tab === "crop") {
-            updateCropBoxDisplay();
+            requestAnimationFrame(() => {
+                updateCropViewerConstraints();
+                updateCropBoxDisplay();
+            });
         }
     }
 
@@ -281,6 +287,7 @@
         if (window.ResizeObserver && dom.cropViewerWrapper) {
             const ro = new ResizeObserver(() => {
                 if (state.images.length > 0) {
+                    updateCropViewerConstraints();
                     updateCropBoxDisplay();
                 }
             });
@@ -906,6 +913,29 @@
     }
 
     /**
+     * クロップビューアの利用可能領域に合わせて画像とステージの最大サイズを同期
+     * 極端な縦長・横長画像でもビューア枠からはみ出さず自動で収める
+     */
+    function updateCropViewerConstraints() {
+        if (!dom.cropViewerWrapper || !dom.baseImagePreview || state.images.length === 0) return;
+        const wrapper = dom.cropViewerWrapper;
+        const style = window.getComputedStyle(wrapper);
+        const padX = (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+        const padY = (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+        const availW = Math.max(20, wrapper.clientWidth - padX);
+        const availH = Math.max(20, wrapper.clientHeight - padY);
+
+        if (availW > 20 && availH > 20) {
+            dom.baseImagePreview.style.maxWidth = `${availW}px`;
+            dom.baseImagePreview.style.maxHeight = `${availH}px`;
+            if (dom.cropStage) {
+                dom.cropStage.style.maxWidth = `${availW}px`;
+                dom.cropStage.style.maxHeight = `${availH}px`;
+            }
+        }
+    }
+
+    /**
      * 基準画像プレビューとクロップ枠の初期表示
      */
     function updateBaseImageView() {
@@ -914,11 +944,13 @@
         dom.baseImagePreview.src = base.img.src;
 
         dom.baseImagePreview.onload = () => {
+            updateCropViewerConstraints();
             updateCropInputs();
             updateCropBoxDisplay();
         };
 
         if (dom.baseImagePreview.complete) {
+            updateCropViewerConstraints();
             updateCropInputs();
             updateCropBoxDisplay();
         }
